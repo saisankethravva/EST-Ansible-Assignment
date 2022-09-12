@@ -1,0 +1,16 @@
+---
+    - hosts: all
+      tasks:
+        - name: Uninstalling apache2
+          apt:
+            name=apache2
+            purge=yes
+            state=absent
+            update_cache=yes
+          become: yes
+
+        - name: deleting other packages
+          apt: 
+            autoremove=yes
+            purge=yes
+          become: yes 
