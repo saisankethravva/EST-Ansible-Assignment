@@ -1,0 +1,83 @@
+
+1. Ansible script for deploy in Machine 1
+
+- hosts: machine1
+  tasks:
+    - name: apache2 installation
+      apt:
+        name=apache2
+        update_cache=yes
+        state=latest
+      become: yes
+    - name: enabling readwrite
+      apache2_module:
+        name=rewrite
+        state=present
+      become: yes
+    - name: index page of machine1
+      ansible.builtin.copy:
+        content: |
+          <html>
+          <head>
+            <title>Hello World.</title>
+          </head>
+          <body>
+            <h1 style="border:2px solid Violet;"> Hello World. Welcome to SJSU - 1</h1>
+	 </body>
+          </html>
+        dest: /var/www/html/index.html
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
+      become: yes
+
+
+2. Ansible Script for deploy in machine 2
+
+- hosts: machine2
+  tasks:
+    - name: apache2 instalation
+      apt: name=apache2
+        update_cache=yes
+        state=latest
+      become: yes
+    - name: readwrite enabling
+      apache2_module:
+        name=rewrite
+        state=present
+      become: yes
+    - name: index page of machine2
+      ansible.builtin.copy:
+        dest: /var/www/html/index.html
+        content: |
+          <html>
+          <head>
+            <title>Hello World.</title>
+          </head>
+          <body>
+            <h1 style="border:2px solid DodgerBlue;"> Hello World. Welcome to SJSU - 2</h1>
+	  </body>
+          </html>
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
+      become: yes
+
+3. Ansible code to undeploy the changes in both machines
+
+---
+    - hosts: all
+      tasks:
+        - name: Uninstalling apache2
+          apt:
+            name=apache2
+            purge=yes
+            state=absent
+            update_cache=yes
+          become: yes
+
+        - name: deleting other packages
+          apt: 
+            autoremove=yes
+            purge=yes
+          become: yes 
