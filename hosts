@@ -1,0 +1,4 @@
+[machine1]
+172.31.95.243 ansible_ssh_user=ubuntu
+[machine2]
+172.31.81.69 ansible_ssh_user=ubuntu
