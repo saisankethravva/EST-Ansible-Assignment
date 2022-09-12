@@ -1,0 +1,28 @@
+- hosts: machine2
+  tasks:
+    - name: apache2 instalation
+      apt: name=apache2
+        update_cache=yes
+        state=latest
+      become: yes
+    - name: readwrite enabling
+      apache2_module:
+        name=rewrite
+        state=present
+      become: yes
+    - name: index page of machine2
+      ansible.builtin.copy:
+        dest: /var/www/html/index.html
+        content: |
+          <html>
+          <head>
+            <title>Hello World.</title>
+          </head>
+          <body>
+            <h1 style="border:2px solid DodgerBlue;"> Hello World. Welcome to SJSU - 2</h1>
+	  </body>
+          </html>
+        owner: ubuntu
+        group: ubuntu
+        mode: '0644'
+      become: yes
